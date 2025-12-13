@@ -11,8 +11,8 @@ const Navbar = () => {
             <Check /> Free on all orders over $50</p>
           <div className="navbar_top_right flex items-center gap-6">
             <select defaultValue="Server location" className="bg-none flex items-center h-[30px] w-[70px] text-sm font-inter font-normal capitalize text-white">
-              <option disabled={true}>eng</option>
-              <option>ind</option>
+              <option disabled={false} className="text-black">eng</option>
+              <option className="text-black">ind</option>
             </select>
 
             <button><Link className="flex items-center text-sm text-white font-inter font-normal capitalize">faqs</Link></button>
@@ -29,7 +29,7 @@ const Navbar = () => {
             <Link to="/" className="text-3xl text-black font-inter font-medium capitalize flex items-center gap-2"><Armchair size="2rem" color="#029fae" />comforty</Link>
           </div>
 
-          <div className="search_box flex justify-center">
+          <div className="search_box hidden md:flex justify-center flex-1 maw-w-md mx-8">
             <form action="#" className="w-full max-w-[443px] h-[44px] relative">
               <input type="text" placeholder="Search here..." className="max-w-[443px] w-full h-full bg-white rounded-lg pl-4" />
               <button className="absolute top-1/2 right-4 -translate-y-1/2"><Search size="22px" color="#272343"/></button>
@@ -65,10 +65,11 @@ const Navbar = () => {
             <div className="dropdown dropdown-start">
               <div tabIndex={0} role="button" className="btn m-1 flex items-center gap-5 capitalize"><Menu />all categories</div>
               <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm capitalize">
-                <li><a>chair</a></li>
-                <li><a>pants</a></li>
-                <li><a>shirt</a></li>
-                <li><a>t-Shirt</a></li>
+                <li><a>top clothes</a></li>
+                <li><a>bottom clothes</a></li>
+                <li><a>dresses</a></li>
+                <li><a>accessories</a></li>
+                <li><a>beauty products</a></li>
               </ul>
             </div>
               <nav className="flex items-center gap-8">
