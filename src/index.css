@@ -8,3 +8,9 @@
 @theme {
   --font-inter: "Inter", sans-serif;
 }
+
+.features_slider>.slick-slider>.slick-prev:before,
+.features_slider>.slick-slider>.slick-next:before {
+    font-size: 39px !important;
+    color: #007580;
+}
