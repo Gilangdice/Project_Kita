@@ -10,7 +10,6 @@ import Footer from "../Components/Footer/Footer.jsx"
 import Banner from "../Components/Banner/Banner.jsx"
 
 
-
 const MainLayout = () => {
   return (
   
