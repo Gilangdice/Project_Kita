@@ -1,26 +1,22 @@
-// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Import model User
+const User = require('../models/User'); 
 
 const protect = async (req, res, next) => {
     let token;
 
-    // 1. Cek apakah token ada di header
     if (
         req.headers.authorization &&
         req.headers.authorization.startsWith('Bearer')
     ) {
         try {
-            // Ambil token dari header (setelah 'Bearer ')
             token = req.headers.authorization.split(' ')[1];
 
-            // Verifikasi token dan dapatkan ID user
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            
+            // Cari user di DB. Jika User.js sudah diupdate, ini akan mendapatkan field 'role'
+            req.user = await User.findById(decoded.id).select('-password'); 
 
-            // Cari user di DB (tanpa field password)
-            req.user = await User.findById(decoded.id).select('-password');
-
-            next(); // Lanjut ke fungsi controller berikutnya
+            next(); 
         } catch (error) {
             console.error(error);
             res.status(401).json({ message: 'Not authorized, token failed' });
@@ -32,13 +28,26 @@ const protect = async (req, res, next) => {
     }
 };
 
-// Middleware untuk membatasi akses hanya untuk Admin
-const admin = (req, res, next) => {
-    if (req.user && req.user.isAdmin) {
-        next(); // Lanjut jika user adalah admin
+// START PERUBAHAN KRITIS
+// Middleware Generik untuk Otorisasi Berdasarkan Peran
+const authorize = (allowedRoles) => (req, res, next) => {
+    if (!req.user) {
+        return res.status(401).json({ message: 'Not authenticated' });
+    }
+
+    const userRole = req.user.role; // Ambil peran dari objek req.user
+    
+    // Cek apakah peran user termasuk dalam array peran yang diizinkan
+    if (allowedRoles.includes(userRole)) {
+        next(); // Lanjutkan
     } else {
-        res.status(403).json({ message: 'Not authorized as an admin' });
+        res.status(403).json({ message: 'Forbidden: Insufficient permissions' });
     }
 };
 
-module.exports = { protect, admin };
+// Middleware 'admin' yang disederhanakan (hanya mengecek role 'admin')
+const admin = authorize(['admin']);
+
+// Ubah module.exports untuk mengekspor fungsi authorize dan admin yang baru
+module.exports = { protect, authorize, admin };
+// END PERUBAHAN KRITIS

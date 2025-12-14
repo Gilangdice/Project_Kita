@@ -17,11 +17,12 @@ const userSchema = mongoose.Schema({
         required: true 
     },
     // Field Kunci untuk Multiple Login (false = Customer, true = Admin)
-    isAdmin: { 
-        type: Boolean, 
+   role: { // Ganti dari isAdmin (Boolean) ke role (String Enum)
+        type: String, 
         required: true, 
-        default: false 
-    }, 
+        enum: ['admin', 'manager', 'user'], // Tambahkan peran lain di sini
+        default: 'user' 
+    },
 }, { 
     timestamps: true // Otomatis menambahkan createdAt dan updatedAt
 });

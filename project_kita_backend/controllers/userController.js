@@ -1,17 +1,22 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken'); 
 
-// Fungsi Pembantu: Membuat JWT (token sesi)
-const generateToken = (id) => {
-    // ID user dimasukkan sebagai payload dalam JWT
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '30d', // Token akan kadaluarsa dalam 30 hari
+// START PERUBAHAN KRITIS
+// Fungsi Pembantu: Membuat JWT (token sesi) - Sekarang menerima objek user lengkap
+const generateToken = (user) => {
+    return jwt.sign({ 
+        id: user._id, 
+        role: user.role // Kunci: Memasukkan role ke dalam token payload
+    }, process.env.JWT_SECRET, {
+        expiresIn: '30d', 
     });
 };
+// END PERUBAHAN KRITIS
 
 // @desc    Register a new user
-// @route   POST /api/users/register
-// @access  Public
+// @route   http://localhost:5000/api/users/register
+// @route   POST/api/users/register
+
 exports.registerUser = async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -22,17 +27,18 @@ exports.registerUser = async (req, res) => {
             return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Buat user baru (Password otomatis di-hash oleh pre-save hook di User.js)
+        // Buat user baru 
         const user = await User.create({ name, email, password }); 
 
         if (user) {
-            // Beri respons sukses beserta token dan status role
             res.status(201).json({
                 _id: user._id, 
                 name: user.name, 
                 email: user.email, 
-                isAdmin: user.isAdmin, // False secara default
-                token: generateToken(user._id),
+                // START PERUBAHAN KRITIS
+                role: user.role, // Ganti isAdmin menjadi role
+                token: generateToken(user), // Kirim objek user lengkap
+                // END PERUBAHAN KRITIS
             });
         } else {
             res.status(400).json({ message: 'Invalid user data' });
@@ -43,23 +49,21 @@ exports.registerUser = async (req, res) => {
 };
 
 // @desc    Authenticate user & get token
-// @route   POST /api/users/login
-// @access  Public
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
         const user = await User.findOne({ email });
 
-        // Cek apakah user ditemukan DAN password cocok
         if (user && (await user.matchPassword(password))) {
-            // Login sukses, kirim data user dan token baru
             res.json({
                 _id: user._id,
                 name: user.name,
                 email: user.email,
-                isAdmin: user.isAdmin, // Penting untuk FE membedakan Customer/Admin
-                token: generateToken(user._id),
+                // START PERUBAHAN KRITIS
+                role: user.role, // Ganti isAdmin menjadi role
+                token: generateToken(user), // Kirim objek user lengkap
+                // END PERUBAHAN KRITIS
             });
         } else {
             res.status(401).json({ message: 'Invalid email or password' });
@@ -70,19 +74,30 @@ exports.loginUser = async (req, res) => {
 };
 
 // @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private
 exports.getUserProfile = async (req, res) => {
-    // req.user diisi oleh authMiddleware/protect
     if (req.user) {
         res.json({
             _id: req.user._id,
             name: req.user.name,
             email: req.user.email,
-            isAdmin: req.user.isAdmin,
+            // START PERUBAHAN KRITIS
+            role: req.user.role, // Ganti isAdmin menjadi role
+            // END PERUBAHAN KRITIS
         });
     } else {
-        // Seharusnya tidak pernah terjadi jika middleware bekerja
         res.status(404).json({ message: 'User not found' });
     }
+};
+
+// Catatan: Jika Anda ingin menambahkan getAllUsers, Anda bisa menambahkannya di sini.
+// @desc    Get all users (Hanya untuk Admin)
+// @route   GET /api/users/userslist
+// @access  Private/Admin
+exports.getAllUsers = async (req, res) => {
+    // Cari semua user di database, kecuali field password
+    // Catatan: Pastikan Anda mengimpor Model User di awal file ini!
+    const users = await User.find({}).select('-password'); 
+    
+    // Beri respons sukses
+    res.status(200).json(users);
 };
