@@ -9,6 +9,12 @@
   --font-inter: "Inter", sans-serif;
 }
 
+.features_slider>.slick-slider>.slick-prev:before,
+.features_slider>.slick-slider>.slick-next:before {
+    font-size: 39px !important;
+    color: #007580;
+  }
+
 .banner_slide_item{
   display: flex !important;
   align-items: center;
@@ -72,7 +78,7 @@
   content: '•';
   text-align: center;
   opacity: .25;
-  color: blackt;
+  color: black;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
