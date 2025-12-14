@@ -6,6 +6,7 @@ import Login from "../Pages/Auth/Login/Login.jsx"
 import Register from "../Pages/Auth/Register/Register.jsx"
 import Error from "../Pages/Error/Error.jsx"
 import AuthCheck from "../AuthCheck/AuthCheck.jsx"
+import Footer from "../Components/Footer/Footer.jsx"
 import Banner from "../Components/Banner/Banner.jsx"
 
 
@@ -27,9 +28,10 @@ const MainLayout = () => {
       {/* not found route */}
       <Route path="*" element={<Error/>} />
     </Routes>
-    </BrowserRouter>
+    <Footer/>
+  </BrowserRouter>
 
   );
 };
 
-export default MainLayout
+export default MainLayout;
