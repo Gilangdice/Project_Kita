@@ -16,6 +16,7 @@ const Register = () => {
           <input type="text" placeholder="Username" className="w-full h-[50px] bg-[#f0f2f3] rounded-lg pl-3.5" />
           <input type="email" placeholder="Email" className="w-full h-[50px] bg-[#f0f2f3] rounded-lg pl-3.5" />
           <input type="password" placeholder="Password" className="w-full h-[50px] bg-[#f0f2f3] rounded-lg pl-3.5" />
+          <input type="verification" placeholder="Password Verification" className="w-full h-[50px] bg-[#f0f2f3] rounded-lg pl-3.5" />
           <button type="submit" className="w-full h-[50px] bg-[#007580] rounded-lg pl-3.5 text-base text-white font-inter font-semibold capitalize flex items-center justify-center cursor-pointer gap-2.5">register<MoveRight /></button>
         </form>
         <p className="text-[#272343] text-base font-inter font-normal mt-4 flex items-center justify-center gap-2.5">Already have an account? <Link to={"/auth/login"} className="text-[#007580]">Login</Link></p>
