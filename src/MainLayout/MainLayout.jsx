@@ -28,6 +28,7 @@ const MainLayout = () => {
       {/* not found route */}
       <Route path="*" element={<Error/>} />
     </Routes>
+    {/* Footer */}
     <Footer/>
   </BrowserRouter>
 

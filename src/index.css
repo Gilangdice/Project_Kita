@@ -9,12 +9,6 @@
   --font-inter: "Inter", sans-serif;
 }
 
-.features_slider>.slick-slider>.slick-prev:before,
-.features_slider>.slick-slider>.slick-next:before {
-    font-size: 39px !important;
-    color: #007580;
-  }
-
 .banner_slide_item{
   display: flex !important;
   align-items: center;
@@ -57,7 +51,7 @@
 
 .slick-dots {
   position: absolute;
-  bottom: -70px;
+  bottom: 100px;
   display: block;
   width: 100%;
   padding: 0;
@@ -78,7 +72,13 @@
   content: '•';
   text-align: center;
   opacity: .25;
-  color: black;
+  color: blackt;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.delivery_component {
+  margin-top: -4rem;
+  position: relative;
+  z-index: 5;
 }
